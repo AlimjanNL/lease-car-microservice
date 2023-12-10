@@ -1,0 +1,49 @@
+services:
+  customer-db:
+    container_name: postgres-customer
+    image: postgres
+    environment:
+      POSTGRES_DB: customer
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db-customer:/data/postgres
+    ports:
+      - "5431:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+  car-db:
+    container_name: postgres-car
+    image: postgres
+    environment:
+      POSTGRES_DB: car
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      PGDATA: /data/postgres
+    volumes:
+      - db-car:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - db
+    restart: unless-stopped
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - log
+networks:
+  db:
+    driver: bridge
+  log:
+    driver: bridge
+
+volumes:
+  db-customer:
+  db-car:

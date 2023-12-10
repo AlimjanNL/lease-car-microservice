@@ -1,0 +1,50 @@
+server:
+    port: 8080
+
+spring:
+    application:
+        name: API_GATEWAY
+    cloud:
+      gateway:
+          routes:
+              - id: customer
+                uri: lb://CUSTOMER
+                predicates:
+                  - Path=/api/v1/customers/**
+                filters:
+                  - name: AuthFilter
+
+#              - id: customer-swagger-ui
+#                uri: lb://CUSTOMER/customers/swagger-ui/
+#                predicates:
+#                  - Path=/customers/swagger-ui/**
+
+              - id: car
+                uri: lb://CAR
+                predicates:
+                  - Path=/api/v1/cars/**
+                filters:
+                  - name: AuthFilter
+
+#              - id: car-swagger-ui
+#                uri: lb://CAR
+#                predicates:
+#                  - Path=/cars/swagger-ui/**
+
+    security:
+      csrf:
+        enabled: false
+
+    zipkin:
+      base-url: http://zipkin:9411
+
+eureka:
+    client:
+        service-url:
+          defaultZone: http://eureka:8761/eureka
+        fetch-registry: true
+        register-with-eureka: true
+
+info:
+  app:
+    name: Api-gateway
